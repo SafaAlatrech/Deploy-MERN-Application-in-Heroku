@@ -1,12 +1,12 @@
 # Deploy-MERN-Application-in-Heroku : 
-## Before you start
+## Before you start : 
 You have a basic knowledge of MERN stack and mongoose.
 You already have a MERN application set up (connected to the database) which is running locally. Alternatively you can use the deploy-mern repository to get started. This blog post will be based on the structure of this project.
 If you have not done it yet, initialise a git repository inside the root folder of your project.
 $ cd your-project
 $ git init
 
-Let’s start!
+## Let’s start!
 Downloading and installing Heroku
 You can install the Heroku Command Line Interface (CLI) from this link. To check it was installed successfully, you can run the following command:
 $ heroku --version
@@ -15,7 +15,7 @@ Once the installation has been completed, you will be able to use the Heroku com
 $ heroku login
 This will open a tab to login from the browser. Once you have logged in we will continue by making some modifications.
 
-Modifying the server.js
+## Modifying the server.js : 
 NOTE: You might see on some occasions -such as in this blog post- that server.js will be used to name the entry point. Nevertheless, it is also common to use index.js to name the entry point instead. The deploy-mern repository uses index.js. Therefore, when we talk about the server.js for the rest of the blog post you might want to refer to the index.js.
 
 THE PORT
@@ -26,7 +26,7 @@ server.js
 const PORT = process.env.PORT || 5000
 In this way, when the application is running locally, the server will be hosted at PORT 5000 because process.env.PORT is not defined, but once is deployed, Heroku will run the server in any available PORT.
 
-MONGODB ATLAS AND THE CONNECTION STRING
+## MONGODB ATLAS AND THE CONNECTION STRING
 
 As you already have built your MERN application, you may need to consider using MongoDB Atlas. After getting registered and logging in the online platform, you can follow the next steps:
 
@@ -43,7 +43,8 @@ image
 
 Now, click "choose a connection method". After selecting the "connect your application" method, you can copy the connection string.
 
-The string will look like this:
+## The string will look like this:
+
 "mongodb+srv://username:<password>@<cluster>/<database>?retryWrites=true&w=majority";
 Where <password>, <cluster> and <database> correspond to your own credentials. (Note: The password corresponds to the database user, not your Atlas account. Do not include < or > when filling in the details).
 
@@ -60,6 +61,7 @@ mongoose
   )
   .then(() => console.log("MongoDB has been connected"))
   .catch((err) => console.log(err));
+  
 Nevertheless, you might want to consider defining the string in a .env file, which will be ignored with .gitignore. This means that the .env file will not be pushed to GitHub. To do this, complete the following steps:
 
 Run the following command to install the dotenv dependency, which will load environment variables from a .env file into process.env.
@@ -93,7 +95,7 @@ server.js:
      .then(() => console.log("MongoDB has been connected"))
      .catch((err) => console.log(err));
 
-PRODUCTION BUILD
+## PRODUCTION BUILD : 
 
 Now we can run the following command in the terminal to create a production build, which will serve.
 $ cd client
@@ -168,7 +170,8 @@ app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
 });
 
-Modifying the package.json
+## Modifying the package.json : 
+  
 Heroku will use the package.json to install all modules listed as dependencies. It is important to note that, when the NODE_ENV environment variable is set to production, npm will not install the modules listed in devDependencies.
 
 Now, add the following lines in your package.json.
@@ -189,19 +192,25 @@ Now, add the following lines in your package.json.
 "heroku-postbuild" will run immediately after Heroku has finished the deployment process.
 NOTE: You may need to modify "server": "nodemon server.js", depending on where your sever.js is located and the name you have given. In this case, server.js is in the same level as package.json.
 
-Creating a Procfile
+## Creating a Procfile
+  
 This will be the first file that Heroku will run. Create a file in the root of your project and name it Procfile. Inside, copy the following code:
 web:npm start
-Deploying to Heroku
+  
+## Deploying to Heroku
 In this section, we will be working using the terminal. First, go to the root folder and create a new app.
+  
 $ cd your-project
 $ heroku create app-name
+  
 Creating ⬢ app-name... done
 https://app-name.herokuapp.com/ | https://git.heroku.com/app-name.git
 Your application will be deployed in the URL displayed. You will need to push any new development with the following commands.
+  
 $ git add . 
 $ git commit -am "commit message"
 $ git push heroku main
+  
 Setting environment variables
 Go to the Heroku dashboard online. You will find a list of all the applications you have built. Then, navigate to the settings tab on the top of the page. Scroll down to find the "config vars" section. Click "reveal config vars". You will need to make sure you have the following variables added:
 
@@ -210,9 +219,15 @@ The Node Environment. The key will be NODE_ENV and the value will be production.
 The PORT. The key will be PORT and the value, in my case, will be 5000.
 Other useful commands
 It is also possible to check the application locally before pushing to Heroku by running the following command.
+  
 $ heroku local
+  
 Another useful command which will allow you to gain insight into the behaviour of your application and debug any problems:
+  
 $ heroku logs --tail
+  
 And to open the application:
-$ heroku open
+  
+$ heroku open 
+  
 And now you have your application hosted and ready to show off!!
